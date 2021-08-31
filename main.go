@@ -1,0 +1,53 @@
+package main
+
+import (
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
+)
+
+func init() {
+	log.SetOutput(os.Stderr)
+	log.SetFormatter(&logrus.TextFormatter{ForceColors: true, DisableTimestamp: true})
+	log.SetLevel(log.ErrorLevel)
+
+	err := initConfig()
+	if err != nil {
+		log.Fatalln("initConfig:", err)
+	}
+
+	log.SetLevel(config.LogLevel)
+
+	err = initTemplates()
+	if err != nil {
+		log.Fatalln("initTemplates:", err)
+	}
+
+	if config.RemoveFilePeriod > 0 {
+		go removeOldFilesThread(config.StoragePath, time.Duration(config.RemoveFilePeriod)*time.Hour)
+	}
+
+	http.HandleFunc("/", HandleRoot)
+	http.HandleFunc("/upload", HandleUpload)
+	http.HandleFunc("/download", HandleDownload)
+}
+
+func main() {
+	go func() {
+		err := http.ListenAndServe(config.ListenAddress, nil)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	log.Debugln("Stop signal received.")
+}
