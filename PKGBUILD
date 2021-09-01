@@ -7,7 +7,7 @@ license=('GPL')
 url="https://github.com/nxshock/$pkgname"
 makedepends=('go' 'git')
 options=('!strip')
-backup=("etc/$pkgname.toml")
+backup=("etc/$pkgname.conf")
 source=("git+https://github.com/nxshock/$pkgname.git")
 sha256sums=('SKIP')
 
