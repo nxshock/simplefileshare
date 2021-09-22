@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
@@ -17,12 +18,18 @@ func HandleRoot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type FileInfo struct {
+		Ext  string
 		Name string
 		Size string
 		Date string
 	}
 
-	var data []FileInfo
+	var data struct {
+		Files           []FileInfo
+		StorageDuration uint
+	}
+
+	data.StorageDuration = config.RemoveFilePeriod
 
 	err := filepath.Walk(config.StoragePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -31,7 +38,14 @@ func HandleRoot(w http.ResponseWriter, r *http.Request) {
 		if info.IsDir() {
 			return nil
 		}
-		data = append(data, FileInfo{filepath.Base(path), sizeToApproxHuman(info.Size()), info.ModTime().Format("02.01.2006 15:04")})
+
+		fileInfo := FileInfo{
+			Ext:  nvl(strings.ToLower(strings.TrimPrefix(filepath.Ext(path), ".")), "dat"),
+			Name: filepath.Base(path),
+			Size: sizeToApproxHuman(info.Size()),
+			Date: info.ModTime().Format("02.01.2006")}
+
+		data.Files = append(data.Files, fileInfo)
 
 		return nil
 	})
@@ -91,7 +105,7 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 	filename := filepath.Base(r.FormValue("filename"))
 
 	if filename == "" {
-		http.Error(w, `"filename" field can not be empty`, http.StatusBadRequest)
+		http.Error(w, `"filename" field can't be empty`, http.StatusBadRequest)
 		return
 	}
 
@@ -114,4 +128,23 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length", strconv.Itoa(int(fileStat.Size())))
 
 	io.CopyBuffer(w, f, make([]byte, 4096))
+}
+
+func HandleIcon(w http.ResponseWriter, r *http.Request) {
+	ext := r.FormValue("ext")
+
+	if ext == "" {
+		http.Error(w, `"ext" field can't be empty`, http.StatusBadRequest)
+		return
+	}
+
+	f, err := iconsFS.Open(filepath.ToSlash(filepath.Join("icons", ext+".svg")))
+	if err != nil {
+		f, _ = iconsFS.Open(filepath.ToSlash(filepath.Join("icons", "bin.svg")))
+	}
+
+	w.Header().Set("Content-Type", "image/svg+xml")
+	w.Header().Set("Cache-Control", "public, max-age=31557600")
+
+	io.Copy(w, f)
 }

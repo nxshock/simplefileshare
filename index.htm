@@ -41,6 +41,8 @@
 			vertical-align: middle;
 			width: 1em;
 			height: 1em;
+			margin: 0;
+			padding: 0;
 		}
 
 		header, footer {
@@ -87,12 +89,12 @@
 		}
 
 		td:nth-child(2) {
-			width: 6em;
+			width: 5em;
 			text-align: right;
 		}
 
 		td:nth-child(3) {
-			width: 10em;
+			width: 6em;
 			text-align: right;
 		}
 
@@ -129,20 +131,18 @@
 			margin: 0;
 			padding: .5em;
 			cursor: pointer;
-			color: #ffffff;
+			color: #fff;
 			text-shadow: 1px 1px 1px #000;
-		}
-
-		svg {
-			margin: 0;
-			vertical-align: middle;
 		}
 	</style>
 </head>
 
 <body>
 	<header>
-		<span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="#61afef" stroke="#353b45"><circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#61afef"/><circle cx="3" cy="10" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="7.5" cy="2.5" r="2"/></svg> File Storage</span>
+		<span>
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="#61afef" stroke="#353b45"><circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#61afef"/><circle cx="3" cy="10" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="7.5" cy="2.5" r="2"/></svg>
+			File Storage
+		</span>
 		<label>
 			<input id="file-uploader" type="file" id="upload-button">
 			Загрузить файл
@@ -158,13 +158,16 @@
 				<th>Размер</th>
 				<th>Дата</th>
 			</tr>
-{{range .}}			<tr>
-				<td><a href="/download?filename={{.Name}}">{{.Name}}</a></td>
+{{range .Files}}			<tr>
+				<td><img src="/icon?ext={{.Ext}}"> <a href="/download?filename={{.Name}}">{{.Name}}</a></td>
 				<td><pre>{{.Size}}</pre></td>
 				<td>{{.Date}}</td>
 			</tr>
 {{end}}		</table>
 	</main>
+	<footer>
+		Файлы хранятся как минимум {{.StorageDuration}} ч.
+	</footer>
 </body>
 
 </html>

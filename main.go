@@ -32,6 +32,7 @@ func init() {
 	}
 
 	http.HandleFunc("/", HandleRoot)
+	http.HandleFunc("/icon", HandleIcon)
 	http.HandleFunc("/upload", HandleUpload)
 	http.HandleFunc("/download", HandleDownload)
 }

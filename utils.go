@@ -26,3 +26,11 @@ func sizeToApproxHuman(s int64) string {
 
 	return fmt.Sprintf("%.1f KiB", v)
 }
+
+func nvl(a1, a2 string) string {
+	if a1 != "" {
+		return a1
+	}
+
+	return a2
+}
