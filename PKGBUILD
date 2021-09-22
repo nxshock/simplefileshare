@@ -18,7 +18,7 @@ sha256sums=(
 build() {
 	cd "$srcdir/$pkgname"
 
-	ln -s ../file-icon-vectors/dist/icons/high-contrast icons
+	mv ../file-icon-vectors/dist/icons/high-contrast icons
 
 	export CGO_CPPFLAGS="${CPPFLAGS}"
 	export CGO_CFLAGS="${CFLAGS}"
