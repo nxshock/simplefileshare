@@ -9,7 +9,7 @@
 		* {
 			font-family: Verdana;
 			font-size: 16px;
-			color: #444;
+			color: #abb2bf;
 			margin: .5em;
 			padding: 0;
 		}
@@ -21,9 +21,9 @@
 		}
 
 		body {
-			background-color: #fafafa;
+			background-color: #282c34;
 			display: flex;
-			justify-content: start;
+			justify-content: space-between;
 			flex-wrap: nowrap;
 			flex-direction: column;
 			height: 100%;
@@ -33,7 +33,7 @@
 
 		a {
 			text-decoration: none;
-			color: #07a;
+			color: #61afef;
 			margin: 0;
 		}
 
@@ -43,9 +43,9 @@
 			height: 1em;
 		}
 
-		header {
-			background-color: #eee;
-			border-bottom: 1px solid #ddd;
+		header, footer {
+			flex-grow: 0;
+			background-color: #353b45;
 			padding: .5em;
 			margin: 0;
 			display: flex;
@@ -53,11 +53,17 @@
 			align-items: center;
 		}
 
+		main {
+			flex-grow: 1;
+		}
+
+		header {
+			border-bottom: 1px solid #3e4451;
+		}
+
 		footer {
-			background-color: #eee;
-			border-top: 1px solid #ddd;
-			padding: .5em;
-			margin: 0;
+			border-top: 1px solid #3e4451;
+			font-size: 75%;
 		}
 
 		h1 {
@@ -72,11 +78,11 @@
 		}
 
 		tr:hover {
-			background-color: #dde;
+			background-color: #353b45;
 		}
 
 		th, td {
-			border: 1px solid #777;
+			border: 1px solid #3e4451;
 			padding: 0.5em;
 		}
 
@@ -86,7 +92,7 @@
 		}
 
 		th {
-			background-color: #eee;
+			background-color: #353b45;
 		}
 
 		form {
@@ -113,21 +119,25 @@
 		}
 
 		label {
+			border-radius: 0.25em;
+			background-color: #61afef;
 			margin: 0;
 			padding: .5em;
-			border: 1px solid #ccc;
 			cursor: pointer;
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #000;
 		}
 
 		svg {
 			margin: 0;
+			vertical-align: middle;
 		}
 		</style>
 </head>
 
 <body>
 	<header>
-		<span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="black" stroke="white"><circle cx="7.5" cy="7.5" r="5" fill="none" stroke="black"/><circle cx="3" cy="10" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="7.5" cy="2.5" r="2"/></svg> File Storage</span>
+		<span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="#61afef" stroke="#353b45"><circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#61afef"/><circle cx="3" cy="10" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="7.5" cy="2.5" r="2"/></svg> File Storage</span>
 		<label>
 			<input id="file-uploader" type="file" id="upload-button">
 			Загрузить файл
@@ -139,7 +149,7 @@
 			<col width="0">
 			<col width="0">
 			<tr>
-				<th>Имя</th>
+				<th>Имя файла</th>
 				<th>Размер</th>
 				<th>Дата</th>
 			</tr>
