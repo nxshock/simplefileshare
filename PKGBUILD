@@ -1,5 +1,5 @@
 pkgname=simplefileshare
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=0
 pkgdesc="Simple file share"
 arch=('x86_64' 'aarch64')
@@ -8,11 +8,17 @@ url="https://github.com/nxshock/$pkgname"
 makedepends=('go' 'git')
 options=('!strip')
 backup=("etc/$pkgname.conf")
-source=("git+https://github.com/nxshock/$pkgname.git")
-sha256sums=('SKIP')
+source=(
+	"git+https://github.com/nxshock/$pkgname.git"
+	'git+https://github.com/dmhendricks/file-icon-vectors')
+sha256sums=(
+	'SKIP'
+	'SKIP')
 
 build() {
 	cd "$srcdir/$pkgname"
+
+	ln -s ../file-icon-vectors/dist/icons/high-contrast icons
 
 	export CGO_CPPFLAGS="${CPPFLAGS}"
 	export CGO_CFLAGS="${CFLAGS}"
