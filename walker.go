@@ -9,7 +9,7 @@ import (
 )
 
 func removeOldFilesThread(path string, olderThan time.Duration) {
-	ticker := time.NewTicker(olderThan)
+	ticker := time.NewTicker(time.Hour)
 
 	for _ = range ticker.C {
 		log.Debugln("Removing old files...")
