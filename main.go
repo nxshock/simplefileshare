@@ -7,13 +7,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
 func init() {
 	log.SetOutput(os.Stderr)
-	log.SetFormatter(&logrus.TextFormatter{ForceColors: true, DisableTimestamp: true})
+	log.SetFormatter(&log.TextFormatter{ForceColors: true, DisableTimestamp: true})
 	log.SetLevel(log.ErrorLevel)
 
 	err := initConfig()
