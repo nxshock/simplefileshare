@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>File Storage</title>
+	<link rel="stylesheet" href="/style.css">
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+	<header>
+		<span>
+			<img src="/favicon.svg">
+			File Storage
+		</span>
+		<label>
+			<input id="file-uploader" type="file" id="upload-button">
+			Загрузить файл
+		</label>
+	</header>
+	<main>
+		<table>
+			<col width="*">
+			<col width="0">
+			<col width="0">
+			<tr>
+				<th>Имя файла</th>
+				<th>Размер</th>
+				<th>Дата</th>
+			</tr>
+{{range .Files}}			<tr>
+				<td><img src="/icon?ext={{.Ext}}"> <a href="/download?filename={{.Name}}">{{.Name}}</a></td>
+				<td><pre>{{.Size}}</pre></td>
+				<td>{{.Date}}</td>
+			</tr>
+{{end}}		</table>
+	</main>
+	<footer>
+		Файлы хранятся как минимум {{.StorageDuration}} ч.
+	</footer>
+</body>
+
+</html>
+<script type="text/javascript">
+function myProgressHandler(event) {
+	var p = Math.floor(event.loaded/event.total*100);
+	document.querySelector("label").innerHTML = 'Загрузка: ' + p + '%...';
+}
+
+function myOnLoadHandler(event) {
+	const response = event.currentTarget;
+	if (response.status != 200) {
+		alert('Ошибка при загрузке файла:\n' + response.responseText);
+	}
+	document.querySelector("label").innerHTML = 'Загрузка завершена.';
+	location.reload();
+}
+
+document.getElementById("file-uploader").addEventListener('change', (e) => {
+	var file = document.getElementById("file-uploader").files[0];
+	var formData = new FormData;
+	formData.append('file', file);
+	var ajax = new XMLHttpRequest;
+	ajax.upload.addEventListener("progress", myProgressHandler, false);
+	ajax.addEventListener('load', myOnLoadHandler, false);
+	ajax.open('POST', '/upload', true);
+	ajax.send(formData);
+});
+</script>

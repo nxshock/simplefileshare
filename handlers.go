@@ -13,7 +13,7 @@ import (
 
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
 	if r.RequestURI != "/" {
-		http.Error(w, "", http.StatusNotFound)
+		http.FileServer(http.FS(stripSiteFS)).ServeHTTP(w, r)
 		return
 	}
 
