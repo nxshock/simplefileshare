@@ -47,6 +47,15 @@ header, footer {
 	align-items: center;
 }
 
+header > span {
+	margin: 0;
+}
+
+header > span > img {
+	width: 1.5em;
+	height: 1.5em;
+}
+
 main {
 	flex-grow: 1;
 }
