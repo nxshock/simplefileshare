@@ -40,7 +40,6 @@ svg, img {
 header, footer {
 	flex-grow: 0;
 	background-color: #353b45;
-	padding: .5em;
 	margin: 0;
 	display: flex;
 	justify-content: space-between;
@@ -58,6 +57,7 @@ header {
 footer {
 	border-top: 1px solid #3e4451;
 	font-size: 75%;
+	padding: .5em;
 }
 
 h1 {
