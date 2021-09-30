@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" stroke="none" viewBox="0 0 30 30"><path d="M 5,30 10,20 H 0 l 5,10" fill="#cc6666"/><path d="M 5,10 0,20 H 10 L 5,10" fill="#de935f"/><path d="M 15,20 20,10 H 10 l 5,10" fill="#f0c674"/><path d="M 15,0 10,10 H 20 L 15,0" fill="#b5bd68"/><path d="M 25,30 30,20 H 20 l 5,10" fill="#8abeb7"/><path d="M 25,10 20,20 H 30 L 25,10" fill="#81a2be"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+	<style>
+		/* OneDark theme */
+		path.red    {fill: #e06c75;}
+		path.orange {fill: #d19a66;}
+		path.yellow {fill: #e5c07b;}
+		path.green  {fill: #98c379;}
+		path.aqua   {fill: #56b6c2;}
+		path.blue   {fill: #61afef;}
+		path.purple {fill: #c678dd;}
+	</style>
+
+	<path class="red"    d="M 5,30 10,20 H 0 l 5,10"/>
+	<path class="orange" d="M 5,10 0,20 H 10 L 5,10"/>
+	<path class="yellow" d="M 15,20 20,10 H 10 l 5,10"/>
+	<path class="green"  d="M 15,0 10,10 H 20 L 15,0"/>
+	<path class="aqua"   d="M 25,30 30,20 H 20 l 5,10"/>
+	<path class="blue"   d="M 25,10 20,20 H 30 L 25,10"/>
+</svg>
