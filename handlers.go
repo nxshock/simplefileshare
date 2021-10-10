@@ -130,6 +130,34 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 	io.CopyBuffer(w, f, make([]byte, 4096))
 }
 
+func HandleStream(w http.ResponseWriter, r *http.Request) {
+	filename := filepath.Base(r.FormValue("filename"))
+
+	if filename == "" {
+		http.Error(w, `"filename" field can't be empty`, http.StatusBadRequest)
+		return
+	}
+
+	f, err := os.Open(filepath.Join(config.StoragePath, filename))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer f.Close()
+
+	fileStat, err := f.Stat()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", mime.TypeByExtension(filepath.Ext(filename)))
+	w.Header().Set("Accept-Ranges", "none")
+	w.Header().Set("Content-Length", strconv.Itoa(int(fileStat.Size())))
+
+	io.CopyBuffer(w, f, make([]byte, 4096))
+}
+
 func HandleIcon(w http.ResponseWriter, r *http.Request) {
 	ext := r.FormValue("ext")
 

@@ -126,6 +126,11 @@ input[type="file"] {
 	display: none;
 }
 
+.right {
+	float: right;
+	color: #545862;
+}
+
 label {
 	border-radius: 0.25em;
 	background-color: #61afef;

@@ -31,7 +31,7 @@
 				<th>Дата</th>
 			</tr>
 {{range .Files}}			<tr>
-				<td><img src="/icon?ext={{.Ext}}"> <a href="/download?filename={{.Name}}">{{.Name}}</a></td>
+				<td><img src="/icon?ext={{.Ext}}"> <a href="/download?filename={{.Name}}">{{.Name}}</a> <a class="right" href="/stream?filename={{.Name}}">просмотр</a></td>
 				<td><pre>{{.Size}}</pre></td>
 				<td>{{.Date}}</td>
 			</tr>

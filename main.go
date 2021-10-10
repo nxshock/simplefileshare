@@ -35,6 +35,7 @@ func init() {
 	http.HandleFunc("/icon", HandleIcon)
 	http.HandleFunc("/upload", HandleUpload)
 	http.HandleFunc("/download", HandleDownload)
+	http.HandleFunc("/stream", HandleStream)
 }
 
 func main() {
