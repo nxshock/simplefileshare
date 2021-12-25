@@ -20,11 +20,6 @@ build() {
 
 	mv ../file-icon-vectors/dist/icons/high-contrast icons
 
-	export CGO_CPPFLAGS="${CPPFLAGS}"
-	export CGO_CFLAGS="${CFLAGS}"
-	export CGO_CXXFLAGS="${CXXFLAGS}"
-	export CGO_LDFLAGS="${LDFLAGS}"
-
 	go build -o $pkgname -buildmode=pie -trimpath -ldflags="-linkmode=external -s -w"
 }
 
