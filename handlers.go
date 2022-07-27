@@ -138,24 +138,7 @@ func HandleStream(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	f, err := os.Open(filepath.Join(config.StoragePath, filename))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer f.Close()
-
-	fileStat, err := f.Stat()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", mime.TypeByExtension(filepath.Ext(filename)))
-	w.Header().Set("Accept-Ranges", "none")
-	w.Header().Set("Content-Length", strconv.Itoa(int(fileStat.Size())))
-
-	io.CopyBuffer(w, f, make([]byte, 4096))
+	http.ServeFile(w, r, filepath.Join(config.StoragePath, filename))
 }
 
 func HandleIcon(w http.ResponseWriter, r *http.Request) {
