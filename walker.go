@@ -8,12 +8,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func removeOldFilesThread(path string, olderThan time.Duration) {
+func removeOldFilesThread(olderThan time.Duration) {
 	ticker := time.NewTicker(time.Hour)
 
 	for range ticker.C {
 		log.Debugln("Removing old files...")
-		err := removeOldFiles(path, olderThan)
+		err := removeOldFiles(olderThan)
 		if err != nil {
 			log.Println(err)
 		}
@@ -21,7 +21,7 @@ func removeOldFilesThread(path string, olderThan time.Duration) {
 	}
 }
 
-func removeOldFiles(path string, olderThan time.Duration) error {
+func removeOldFiles(olderThan time.Duration) error {
 	return filepath.Walk(config.StoragePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
