@@ -11,7 +11,7 @@ import (
 func removeOldFilesThread(path string, olderThan time.Duration) {
 	ticker := time.NewTicker(time.Hour)
 
-	for _ = range ticker.C {
+	for range ticker.C {
 		log.Debugln("Removing old files...")
 		err := removeOldFiles(path, olderThan)
 		if err != nil {
