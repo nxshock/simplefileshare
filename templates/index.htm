@@ -7,6 +7,33 @@
 	<title>File Storage</title>
 	<link rel="stylesheet" href="/style.css">
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+	<script type="text/javascript">
+		function myProgressHandler(event) {
+			var p = Math.floor(event.loaded / event.total * 100);
+			document.querySelector("label").innerHTML = 'Загрузка: ' + p + '%...';
+		}
+
+		function myOnLoadHandler(event) {
+			const response = event.currentTarget;
+			if (response.status != 200) {
+				alert('Ошибка при загрузке файла:\n' + response.responseText);
+			}
+			document.querySelector("label").innerHTML = 'Загрузка завершена.';
+			location.reload();
+		}
+
+		document.getElementById("file-uploader").addEventListener('change', (e) => {
+			var file = document.getElementById("file-uploader").files[0];
+			var formData = new FormData;
+			formData.append('file', file);
+			var ajax = new XMLHttpRequest;
+			ajax.upload.addEventListener("progress", myProgressHandler, false);
+			ajax.addEventListener('load', myOnLoadHandler, false);
+			ajax.open('POST', '/upload', true);
+			ajax.send(formData);
+		});
+	</script>
 </head>
 
 <body>
@@ -30,12 +57,15 @@
 				<th>Размер</th>
 				<th>Дата</th>
 			</tr>
-{{range .Files}}			<tr>
+			{{range .Files}} <tr>
 				<td><img src="/icon?ext={{.Ext}}"> <a href="/download?filename={{.Name}}">{{.Name}}</a> <a class="right" href="/stream?filename={{.Name}}">просмотр</a></td>
-				<td><pre>{{.Size}}</pre></td>
+				<td>
+					<pre>{{.Size}}</pre>
+				</td>
 				<td>{{.Date}}</td>
 			</tr>
-{{end}}		</table>
+			{{end}}
+		</table>
 	</main>
 	<footer>
 		Файлы хранятся как минимум {{.StorageDuration}} ч.
@@ -43,29 +73,3 @@
 </body>
 
 </html>
-<script type="text/javascript">
-function myProgressHandler(event) {
-	var p = Math.floor(event.loaded/event.total*100);
-	document.querySelector("label").innerHTML = 'Загрузка: ' + p + '%...';
-}
-
-function myOnLoadHandler(event) {
-	const response = event.currentTarget;
-	if (response.status != 200) {
-		alert('Ошибка при загрузке файла:\n' + response.responseText);
-	}
-	document.querySelector("label").innerHTML = 'Загрузка завершена.';
-	location.reload();
-}
-
-document.getElementById("file-uploader").addEventListener('change', (e) => {
-	var file = document.getElementById("file-uploader").files[0];
-	var formData = new FormData;
-	formData.append('file', file);
-	var ajax = new XMLHttpRequest;
-	ajax.upload.addEventListener("progress", myProgressHandler, false);
-	ajax.addEventListener('load', myOnLoadHandler, false);
-	ajax.open('POST', '/upload', true);
-	ajax.send(formData);
-});
-</script>
