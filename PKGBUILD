@@ -1,5 +1,5 @@
 pkgname=simplefileshare
-pkgver=0.1.3
+pkgver=0.1.4
 pkgrel=0
 pkgdesc="Simple file share"
 arch=('x86_64' 'aarch64')

@@ -7,33 +7,6 @@
 	<title>File Storage</title>
 	<link rel="stylesheet" href="/style.css">
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
-	<script>
-		function myProgressHandler(event) {
-			var p = Math.floor(event.loaded / event.total * 100);
-			document.querySelector("label").innerHTML = 'Загрузка: ' + p + '%...';
-		}
-
-		function myOnLoadHandler(event) {
-			const response = event.currentTarget;
-			if (response.status != 200) {
-				alert('Ошибка при загрузке файла:\n' + response.responseText);
-			}
-			document.querySelector("label").innerHTML = 'Загрузка завершена.';
-			location.reload();
-		}
-
-		document.getElementById("file-uploader").addEventListener('change', (e) => {
-			var file = document.getElementById("file-uploader").files[0];
-			var formData = new FormData;
-			formData.append('file', file);
-			var ajax = new XMLHttpRequest;
-			ajax.upload.addEventListener("progress", myProgressHandler, false);
-			ajax.addEventListener('load', myOnLoadHandler, false);
-			ajax.open('POST', '/upload', true);
-			ajax.send(formData);
-		});
-	</script>
 </head>
 
 <body>
@@ -43,8 +16,8 @@
 			File Storage
 		</span>
 		<label>
-			<input id="file-uploader" type="file">
-			Загрузить файл
+			<input id="file-uploader" type="file" multiple>
+			Загрузить файл(ы)
 		</label>
 	</header>
 	<main>
@@ -70,6 +43,34 @@
 	<footer>
 		Файлы хранятся как минимум {{.StorageDuration}} ч.
 	</footer>
+	<script>
+		function myProgressHandler(event) {
+			var p = Math.floor(event.loaded / event.total * 100);
+			document.querySelector("label").innerHTML = 'Загрузка: ' + p + '%...';
+		}
+
+		function myOnLoadHandler(event) {
+			const response = event.currentTarget;
+			if (response.status != 200) {
+				alert('Ошибка при загрузке:\n' + response.responseText);
+			}
+			document.querySelector("label").innerHTML = 'Загрузка завершена.';
+			window.location.reload();
+		}
+
+		document.getElementById("file-uploader").addEventListener('change', (e) => {
+			var formData = new FormData;
+			var ajax = new XMLHttpRequest;
+			for (var i = 0; i < document.getElementById("file-uploader").files.length; i++) {
+				file = document.getElementById("file-uploader").files[i];
+				formData.append('file', file);
+			}
+			ajax.upload.addEventListener("progress", myProgressHandler, false);
+			ajax.addEventListener('load', myOnLoadHandler, false);
+			ajax.open('POST', '/upload', true);
+			ajax.send(formData);
+		});
+	</script>
 </body>
 
 </html>

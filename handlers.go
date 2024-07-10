@@ -74,30 +74,37 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, header, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
+	var errors []string
+	for _, header := range r.MultipartForm.File["file"] {
+		file, err := header.Open()
+		if err != nil {
+			errors = append(errors, err.Error())
+			continue
+		}
+		defer file.Close()
 
-	filePath := filepath.Join(config.StoragePath, header.Filename)
-	if _, err := os.Stat(filePath); !os.IsNotExist(err) {
-		http.Error(w, "файл с таким именем уже существует", http.StatusBadRequest)
-		return
+		filePath := filepath.Join(config.StoragePath, header.Filename)
+		if _, err := os.Stat(filePath); !os.IsNotExist(err) {
+			errors = append(errors, fmt.Sprintf("файл с именем %s уже существует", header.Filename))
+			continue
+		}
+
+		f, err := os.Create(filePath)
+		if err != nil {
+			errors = append(errors, err.Error())
+			continue
+		}
+		defer f.Close()
+
+		_, err = io.Copy(f, file)
+		if err != nil {
+			errors = append(errors, err.Error())
+			continue
+		}
 	}
 
-	f, err := os.Create(filePath)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer f.Close()
-
-	_, err = io.Copy(f, file)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if len(errors) > 0 {
+		http.Error(w, strings.Join(errors, "\n"), http.StatusBadRequest)
 	}
 }
 
@@ -127,7 +134,7 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Accept-Ranges", "none")
 	w.Header().Set("Content-Length", strconv.Itoa(int(fileStat.Size())))
 
-	io.CopyBuffer(w, f, make([]byte, 4096))
+	_, _ = io.CopyBuffer(w, f, make([]byte, 4096))
 }
 
 func HandleStream(w http.ResponseWriter, r *http.Request) {
@@ -157,5 +164,5 @@ func HandleIcon(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/svg+xml")
 	w.Header().Set("Cache-Control", "public, max-age=31557600")
 
-	io.Copy(w, f)
+	_, _ = io.Copy(w, f)
 }

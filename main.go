@@ -28,7 +28,7 @@ func init() {
 	}
 
 	if config.RemoveFilePeriod > 0 {
-		go removeOldFilesThread(config.StoragePath, time.Duration(config.RemoveFilePeriod)*time.Hour)
+		go removeOldFilesThread(time.Duration(config.RemoveFilePeriod) * time.Hour)
 	}
 
 	http.HandleFunc("/", HandleRoot)
