@@ -109,6 +109,13 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleDownload(w http.ResponseWriter, r *http.Request) {
+	root, err := os.OpenRoot(config.StoragePath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer root.Close()
+
 	filename := filepath.Base(r.FormValue("filename"))
 
 	if filename == "" {
@@ -116,7 +123,7 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	f, err := os.Open(filepath.Join(config.StoragePath, filename))
+	f, err := root.Open(filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -140,8 +147,8 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 func HandleStream(w http.ResponseWriter, r *http.Request) {
 	filename := filepath.Base(r.FormValue("filename"))
 
-	if filename == "" {
-		http.Error(w, `"filename" field can't be empty`, http.StatusBadRequest)
+	if !filepath.IsLocal(filename) {
+		http.Error(w, `wrong "filename" specified`, http.StatusBadRequest)
 		return
 	}
 

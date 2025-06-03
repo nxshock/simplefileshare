@@ -1,7 +1,9 @@
 package main
 
 import (
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -40,7 +42,17 @@ func init() {
 
 func main() {
 	go func() {
-		err := http.ListenAndServe(config.ListenAddress, nil)
+		u, err := url.Parse(config.ListenAddress)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		listener, err := net.Listen(u.Scheme, u.Host+u.Path)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		err = http.Serve(listener, http.DefaultServeMux)
 		if err != nil {
 			log.Fatalln(err)
 		}

@@ -1,19 +1,19 @@
 pkgname=simplefileshare
-pkgver=0.1.4
+pkgver=0.1.5
 pkgrel=0
 pkgdesc="Simple file share"
-arch=('x86_64' 'aarch64')
-license=('GPL')
+arch=("x86_64" "aarch64")
+license=("GPL")
 url="https://github.com/nxshock/$pkgname"
-makedepends=('go' 'git')
-options=('!strip')
+makedepends=("go" "git")
+options=("!strip")
 backup=("etc/$pkgname.conf")
 source=(
 	"git+https://github.com/nxshock/$pkgname.git"
-	'git+https://github.com/dmhendricks/file-icon-vectors')
+	"git+https://github.com/dmhendricks/file-icon-vectors")
 sha256sums=(
-	'SKIP'
-	'SKIP')
+	"SKIP"
+	"SKIP")
 
 build() {
 	cd "$srcdir/$pkgname"
