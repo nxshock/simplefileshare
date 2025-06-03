@@ -47,10 +47,12 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		syscall.Umask(0007)
-
 		listener, err := net.Listen(u.Scheme, u.Host+u.Path)
 		if err != nil {
+			log.Fatalln(err)
+		}
+
+		if err = os.Chmod(u.Host+u.Path, 0660); err != nil {
 			log.Fatalln(err)
 		}
 
